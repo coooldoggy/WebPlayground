@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
+
 const GenerateReview: React.FC = () => {
   const [link, setLink] = useState("");
   const [reviews, setReviews] = useState<string[]>([]);
@@ -19,7 +21,7 @@ const GenerateReview: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch("/api/review", {
+      const response = await fetch(`${PROXY}/api/review`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" 
