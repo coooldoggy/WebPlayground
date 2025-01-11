@@ -1,19 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const GenerateReview: React.FC = () => {
   const [link, setLink] = useState("");
   const [reviews, setReviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // const [proxy, setProxy] = useState("");
-
-  // Dynamically calculate PROXY on the client
-  // useEffect(() => {
-  //   const isLocalhost = typeof window !== "undefined" && window.location.hostname === "localhost";
-  //   setProxy(isLocalhost ? "" : "/api");
-  // }, []);
 
   const handleFetchReviews = async () => {
     setError("");
