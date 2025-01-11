@@ -19,7 +19,18 @@ export async function POST(req: NextRequest) {
     }
 
     // Fetch the HTML content of the product page
-    const { data: html } = await axios.get(link);
+    let html;
+    try {
+      const response = await axios.get(link);
+      html = response.data;
+    } catch (err) {
+      console.error("Failed to fetch the product page:", err);
+      return NextResponse.json(
+        { error: "Failed to fetch the product page." },
+        { status: 500 }
+      );
+    }
+
     const $ = load(html);
 
     // Extract Product Description
@@ -46,20 +57,29 @@ export async function POST(req: NextRequest) {
     }
 
     // Use GPT to generate a review
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "You are a helpful assistant who generates product reviews. Please give result in Korean" },
-        {
-          role: "user",
-          content: `Here are the details of the product:\nDescriptions: ${descriptions}\nImages: ${imageUrls.join(
-            ", "
-          )}\n\nWrite three friendly and detailed reviews of this product.`,
-        },
-      ],
-    });
+    let review;
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "You are a helpful assistant who generates product reviews. Please give result in Korean" },
+          {
+            role: "user",
+            content: `Here are the details of the product:\nDescriptions: ${descriptions}\nImages: ${imageUrls.join(
+              ", "
+            )}\n\nWrite three friendly and detailed reviews of this product.`,
+          },
+        ],
+      });
 
-    const review = completion.choices[0].message.content;
+      review = completion.choices[0].message.content;
+    } catch (err) {
+      console.error("Failed to generate the review:", err);
+      return NextResponse.json(
+        { error: "Failed to generate the review." },
+        { status: 500 }
+      );
+    }
 
     // Combine the response
     return NextResponse.json({ descriptions, imageUrls, review });

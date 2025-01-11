@@ -7,7 +7,7 @@ const GenerateReview: React.FC = () => {
   const [reviews, setReviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [proxy, setProxy] = useState("");
+  // const [proxy, setProxy] = useState("");
 
   // Dynamically calculate PROXY on the client
   // useEffect(() => {
@@ -26,7 +26,7 @@ const GenerateReview: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${proxy}/api/review`, {
+      const response = await fetch(`/api/review`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
