@@ -1,10 +1,6 @@
 [build]
   command = "npm run build"
   publish = ".next"
-  edge_functions = "edge-functions"
-
-[functions]
-  directory = "netlify/functions"
 
 [[redirects]]
   from = "/*"
