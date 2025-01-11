@@ -10,10 +10,10 @@ const GenerateReview: React.FC = () => {
   const [proxy, setProxy] = useState("");
 
   // Dynamically calculate PROXY on the client
-  useEffect(() => {
-    const isLocalhost = typeof window !== "undefined" && window.location.hostname === "localhost";
-    setProxy(isLocalhost ? "" : "/proxy");
-  }, []);
+  // useEffect(() => {
+  //   const isLocalhost = typeof window !== "undefined" && window.location.hostname === "localhost";
+  //   setProxy(isLocalhost ? "" : "/api");
+  // }, []);
 
   const handleFetchReviews = async () => {
     setError("");

@@ -12,8 +12,3 @@
   to = "/index.html"
   status = 200
 
-[[redirects]]
-  from = "/proxy/*"
-  to = "https://api.openai.com/:splat"
-  status = 200
-  force = true
