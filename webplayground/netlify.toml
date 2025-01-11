@@ -10,14 +10,14 @@
 
 
   [[redirects]]
-  from = "/proxy/*"
+  from = "/api/*"
   to = "https://api.openai.com/:splat"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
 
 [[headers]]
-  for = "/proxy/*"
+  for = "/api/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, POST, OPTIONS"
