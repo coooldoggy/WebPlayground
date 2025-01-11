@@ -1,29 +1,9 @@
 [build]
   command = "npm run build"
   publish = ".next"
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[[redirects]]
-  from = "/_next/static/*"
-  to = "/static/:splat"
-  status = 301
-  force = true
-
 [[plugins]]
-package = "@netlify/plugin-nextjs"
-
-[[headers]]
-  for = "/manifest.json"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Security-Policy = "default-src 'self';"
-    Content-Security-Policy = "script-src-elem https://netlify-cdp-loader.netlify.app/netlify.js https://www.googletagmanager.com/gtag/js"
-    Content-Security-Policy = "connect-src https://eth-goerli.g.alchemy.com https://eth-mainnet.g.alchemy.com https://*.google-analytics.com https://lend-metadata.s3.ap-southeast-1.amazonaws.com https://lend-metadata-production.s3.ap-southeast-1.amazonaws.com https://api.coingecko.com wss://*.bridge.walletconnect.org https://registry.walletconnect.com https://mainnet.infura.io"
+  package = "@netlify/plugin-nextjs"
