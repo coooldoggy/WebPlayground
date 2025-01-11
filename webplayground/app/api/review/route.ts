@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { load } from "cheerio";
 import OpenAI from "openai";
-
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("Missing OpenAI API key in environment variables.");
-}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -22,25 +18,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate the link
-    try {
-      new URL(link);
-    } catch {
-      return NextResponse.json(
-        { error: "Invalid URL provided." },
-        { status: 400 }
-      );
-    }
-
     // Fetch the HTML content of the product page
     let html;
     try {
       const response = await axios.get(link);
       html = response.data;
-    } catch (err) {
-      console.error("Failed to fetch the product page:", err);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.error("Axios error:", err.response?.data || err.message);
+        return NextResponse.json(
+          { error: `Failed to fetch the product page: ${err.message}` },
+          { status: 500 }
+        );
+      }
+      console.error("Unknown error while fetching product page:", err);
       return NextResponse.json(
-        { error: "Failed to fetch the product page." },
+        { error: "An unexpected error occurred while fetching the product page." },
         { status: 500 }
       );
     }
@@ -52,9 +45,7 @@ export async function POST(req: NextRequest) {
       .map((_, el) => $(el).text().trim())
       .get()
       .filter((text) => text);
-    const descriptions = descriptionElements.length > 0
-      ? descriptionElements.join("\n")
-      : "No descriptions found.";
+    const descriptions = descriptionElements.join("\n");
 
     // Extract Product Images
     const imageUrls: string[] = [];
@@ -89,30 +80,34 @@ export async function POST(req: NextRequest) {
       });
 
       review = completion.choices[0].message.content;
-    } catch (err: any) {
-      if (err.response) {
-        console.error("OpenAI API Error:", err.response.data);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("OpenAI API error:", err.message);
         return NextResponse.json(
-          { error: `OpenAI API error: ${err.response.data.error.message}` },
+          { error: `Failed to generate the review: ${err.message}` },
           { status: 500 }
         );
       }
-      console.error("Failed to generate the review:", err);
+      console.error("Unknown error during OpenAI request:", err);
       return NextResponse.json(
-        { error: "Failed to generate the review due to an unexpected error." },
+        { error: "An unexpected error occurred while generating the review." },
         { status: 500 }
       );
     }
 
     // Combine the response
+    return NextResponse.json({ descriptions, imageUrls, review });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error("General error:", err.message);
+      return NextResponse.json(
+        { error: `An error occurred: ${err.message}` },
+        { status: 500 }
+      );
+    }
+    console.error("An unknown error occurred:", err);
     return NextResponse.json(
-      { descriptions, imageUrls, review },
-      { headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" } }
-    );
-  } catch (error) {
-    console.error("Error processing request:", error);
-    return NextResponse.json(
-      { error: "An unexpected error occurred while processing the request." },
+      { error: "An unexpected error occurred." },
       { status: 500 }
     );
   }
