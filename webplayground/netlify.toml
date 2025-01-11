@@ -14,6 +14,6 @@
 
 [[redirects]]
   from = "/proxy/*"
-  to = "https://api.nexon.co.kr/:splat"
+  to = "https://api.openai.com/:splat"
   status = 200
   force = true
