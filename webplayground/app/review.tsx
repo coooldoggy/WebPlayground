@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
-
-const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
+import { useState, useEffect } from "react";
 
 const GenerateReview: React.FC = () => {
   const [link, setLink] = useState("");
   const [reviews, setReviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [proxy, setProxy] = useState("");
+
+  // Dynamically calculate PROXY on the client
+  useEffect(() => {
+    const isLocalhost = typeof window !== "undefined" && window.location.hostname === "localhost";
+    setProxy(isLocalhost ? "" : "/proxy");
+  }, []);
 
   const handleFetchReviews = async () => {
     setError("");
@@ -21,10 +26,10 @@ const GenerateReview: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${PROXY}/api/review`, {
+      const response = await fetch(`${proxy}/api/review`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" 
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ link }),
       });
