@@ -57,7 +57,7 @@ export async function POST(req: Request) {
           role: "user",
           content: `Here are the details of the product:\nDescriptions: ${descriptions}\nImages: ${imageUrls.join(
             ", "
-          )}\n\nWrite three friendly and detailed reviews of this product.`,
+          )}\n\nWrite three friendly, casual and detailed reviews of this product.`,
         },
       ],
     });
