@@ -19,7 +19,7 @@ const GenerateReview: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/review`, {
+      const response = await fetch("/api/review", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
