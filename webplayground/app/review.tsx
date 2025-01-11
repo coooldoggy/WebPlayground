@@ -11,7 +11,7 @@ const GenerateReview: React.FC = () => {
 
   useEffect(() => {
     const isLocalhost = typeof window !== "undefined" && window.location.hostname === "localhost";
-    setProxy(isLocalhost ? "" : "/proxy");
+    setProxy(isLocalhost ? "" : "");
   }, []);
 
   const handleFetchReviews = async () => {
