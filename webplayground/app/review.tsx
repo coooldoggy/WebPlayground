@@ -7,6 +7,8 @@ const GenerateReview: React.FC = () => {
   const [reviews, setReviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
+  const URL = `${PROXY}/api/review`;
 
   const handleFetchReviews = async () => {
     setError("");
@@ -19,7 +21,7 @@ const GenerateReview: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch("/api/review", {
+      const response = await fetch(URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

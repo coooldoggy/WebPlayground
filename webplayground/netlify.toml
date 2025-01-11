@@ -2,13 +2,17 @@
   command = "npm run build"
   publish = ".next"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+
+  [[redirects]]
+  from = "/api/*"
+  to = "https://api.openai.com/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
 
