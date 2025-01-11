@@ -52,12 +52,12 @@ export async function POST(req: Request) {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: "You are a helpful assistant." },
+        { role: "system", content: "You are a helpful assistant who generates product reviews. Please give result in Korean" },
         {
           role: "user",
-          content: `Descriptions: ${descriptions}\nImages: ${imageUrls.join(
+          content: `Here are the details of the product:\nDescriptions: ${descriptions}\nImages: ${imageUrls.join(
             ", "
-          )}\n\nWrite three reviews.`,
+          )}\n\nWrite three friendly and detailed reviews of this product.`,
         },
       ],
     });
