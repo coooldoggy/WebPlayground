@@ -1,14 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const GenerateReview: React.FC = () => {
   const [link, setLink] = useState("");
   const [reviews, setReviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
-  const URL = `${PROXY}/api/review`;
+  const [proxy, setProxy] = useState("");
+
+  useEffect(() => {
+    const isLocalhost = typeof window !== "undefined" && window.location.hostname === "localhost";
+    setProxy(isLocalhost ? "" : "/proxy");
+  }, []);
 
   const handleFetchReviews = async () => {
     setError("");
@@ -21,7 +25,7 @@ const GenerateReview: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(URL, {
+      const response = await fetch(`${proxy}/api/review`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
