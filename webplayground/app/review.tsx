@@ -36,7 +36,7 @@ const GenerateReview: React.FC = () => {
       const data = await response.json();
       // Parse reviews if they're in a single string
       if (typeof data.review === "string") {
-        const parsedReviews = data.review.split("---").map((review) => review.trim());
+        const parsedReviews = data.review.split("---").map((review: string) => review.trim());
         setReviews(parsedReviews);
       } else {
         setError("Unexpected response format.");
